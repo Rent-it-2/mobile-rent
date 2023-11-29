@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import sptech.school.rent_it.data.models.CreditCard
 import sptech.school.rent_it.data.models.Item
 import sptech.school.rent_it.data.models.LoginRequest
+import sptech.school.rent_it.data.models.RegistrationRequest
 import sptech.school.rent_it.data.models.User
 import sptech.school.rent_it.data.network.Service
 import sptech.school.rent_it.utils.Routes
@@ -26,6 +27,10 @@ class UserViewModel(
     val userLoggin: LiveData<LoginRequest>
         get() = _userLoggin
 
+    private val _userRegistration: MutableLiveData<RegistrationRequest> = MutableLiveData()
+    val userRegistration: LiveData<RegistrationRequest>
+        get() = _userRegistration
+
     private val _userCartoes: MutableLiveData<List<CreditCard>> = MutableLiveData()
     val userCartoes: LiveData<List<CreditCard>>
         get() = _userCartoes
@@ -34,7 +39,7 @@ class UserViewModel(
     val userItems: LiveData<List<Item>>
         get() = _userItems
 
-//    fun login(email: String?, senha: String?): Boolean {
+//    fun login(email: String?, senha: RegistrationScreen.ktString?): Boolean {
 //
 //        for (user in users) {
 //            if (email == user.email &&
@@ -61,13 +66,40 @@ class UserViewModel(
         }
     }
 
-    fun registration(usuario: User) {
+    fun registration(
+        nomeCompleto: String,
+        apelido: String,
+        email: String,
+        telefone: String,
+        password: String,
+        navController: NavHostController
+    ) {
+        viewModelScope.launch {
+
+            try {
+                val request = RegistrationRequest(
+                    nome = nomeCompleto,
+                    apelido = apelido,
+                    email = email,
+                    telefone = telefone,
+                    password = password
+                )
+                val userRegistration = service.postRegistration(request)
+//                _userData.value = userRegistration
+                Log.d("Service success:", "Response: $userRegistration")
+                navController.navigate(Routes.LOGIN_SCREEN)
+            } catch (e: Exception) {
+                Log.d("Service error:", e.toString())
+            }
+        }
     }
 
-    fun getUserCards(){
+
+    fun getUserCards() {
         viewModelScope.launch {
             try {
-                val userCards = service.getUserCartaos(userData.value?.id)
+                val userCards =
+                    service.getUserCartaos(userData.value?.id, "Bearer${userData.value?.token}")
                 _userCartoes.value = userCards
                 Log.d("Service error:", "Response: cartões: ${_userCartoes.value}")
             } catch (e: Exception) {
@@ -76,10 +108,11 @@ class UserViewModel(
         }
     }
 
-    fun getUserItems(){
+    fun getUserItems() {
         viewModelScope.launch {
             try {
-                val userItems = service.getUserItems(userData.value?.id)
+                val userItems =
+                    service.getUserItems(userData.value?.id, "Bearer${userData.value?.token}")
                 _userItems.value = userItems
                 Log.d("Service error:", "Response: itens do usuário: ${_userItems.value}")
             } catch (e: Exception) {

@@ -9,7 +9,6 @@ import sptech.school.rent_it.ui.screen.ProductViewModel
 
 @Composable
 fun ProductScreen(
-    navController: NavHostController,
     navigateToDetail: (Int) -> Unit,
     viewModel: ProductViewModel,
     products: List<Item>,

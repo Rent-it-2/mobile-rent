@@ -1,4 +1,4 @@
-package sptech.school.rent_it.ui.screens.searchScreen
+package sptech.school.rent_it.ui.screen.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -84,15 +84,3 @@ fun SearchScreen(
         )
     }
 }
-
-//@Preview(showBackground = true)
-//@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-//@Composable
-//fun SearchScreenDarkPreview() {
-//    RentItTheme {
-//        SearchScreen(
-//            navController = rememberNavController(),
-//            navigateToDetail = {}
-//        )
-//    }
-//}

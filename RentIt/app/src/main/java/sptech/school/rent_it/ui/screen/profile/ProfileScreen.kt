@@ -58,29 +58,15 @@ data class TabItem(
 )
 
 val TAB_ITENS = listOf(
-    //    TabItem(
-//        title = R.string.meus_dados,
-//        route = Routes.PRODUCT_SCREEN,
-//        selectedIcon = Icons.Filled.Person2,
-//        unselectedIcon = Icons.Outlined.Person2,
-//    ),
     TabItem(
         title = R.string.meus_itens,
-//        route = Routes.PRODUCT_SCREEN,
         selectedIcon = Icons.Filled.Label,
         unselectedIcon = Icons.Outlined.Label,
     ),
     TabItem(
         title = R.string.cartoes,
-//        route = Routes.PRODUCT_SCREEN,
         selectedIcon = Icons.Filled.CreditCard,
         unselectedIcon = Icons.Outlined.CreditCard,
-    ),
-        TabItem(
-        title = R.string.enderecos,
-//        route = Routes.PRODUCT_SCREEN,
-        selectedIcon = Icons.Filled.Map,
-        unselectedIcon = Icons.Outlined.Map,
     ),
 )
 
@@ -217,27 +203,3 @@ fun CreditCardTab(
     Spacer(modifier = Modifier.padding(8.dp))
     CreditCardList(viewModel, modifier)
 }
-
-//@Composable
-//fun AdressTab(
-//    viewModel: UserViewModel,
-//    modifier: Modifier = Modifier
-//) {
-//    Spacer(modifier = Modifier.padding(8.dp))
-//    AdressList(viewModel, modifier)
-//}
-
-//@Preview(showBackground = true)
-//@Preview(
-//    showBackground = true,
-//    uiMode = Configuration.UI_MODE_NIGHT_YES
-//)
-//@Composable
-//fun ProfileScreenDarkPreview() {
-//    RentItTheme {
-//        ProfileScreen(
-//            navController = rememberNavController(),
-//            navigateToDetail = {}
-//        )
-//    }
-//}

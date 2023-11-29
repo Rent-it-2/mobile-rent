@@ -8,11 +8,13 @@ import sptech.school.rent_it.data.models.CompleteItem
 import sptech.school.rent_it.data.models.Item
 import sptech.school.rent_it.ui.screen.ProductViewModel
 import sptech.school.rent_it.ui.screen.UserViewModel
+import sptech.school.rent_it.ui.screen.login.LoginScreen
 import sptech.school.rent_it.ui.screen.product.ProductScreen
-import sptech.school.rent_it.ui.screens.login.LoginScreen
+import sptech.school.rent_it.ui.screen.registration.RegistrationScreen
+import sptech.school.rent_it.ui.screen.search.SearchScreen
 import sptech.school.rent_it.ui.screens.productDetail.ProductDetailScreen
 import sptech.school.rent_it.ui.screens.profile.ProfileScreen
-import sptech.school.rent_it.ui.screens.searchScreen.SearchScreen
+import sptech.school.rent_it.ui.screens.rentProductScreen.RentProductScreen
 import sptech.school.rent_it.utils.Routes
 
 @Composable
@@ -30,19 +32,20 @@ fun RentItNavigationGraph(
         startDestination = Routes.LOGIN_SCREEN,
     ) {
         composable(route = Routes.LOGIN_SCREEN) {
-            LoginScreen(viewModel = viewModelUser, navController = navController)
+            LoginScreen(
+                viewModel = viewModelUser,
+                navController = navController
+            )
         }
-//        composable(route = Routes.RESGISTRATION_SCREEN) {
-//            RegistrationScreen(
-//                onNavigateLogin = {
-//                    navController.navigate(Routes.LOGIN_SCREEN)
-//                }
-//            )
-//        }
+        composable(route = Routes.RESGISTRATION_SCREEN) {
+            RegistrationScreen(
+                viewModel = viewModelUser,
+                navController = navController
+            )
+        }
         composable(route = Routes.PRODUCT_SCREEN) {
             ProductScreen(
                 navigateToDetail = navigateToDetail,
-                navController = navController,
                 products = allProducts,
                 viewModel = viewModelProduct
             )
@@ -54,13 +57,13 @@ fun RentItNavigationGraph(
                 viewModelProduct = viewModelProduct,
             )
         }
-//        composable(route = Routes.RENT_PRODUCT_SCREEN) {
-//            RentProductScreen(
+        composable(route = Routes.RENT_PRODUCT_SCREEN) {
+            RentProductScreen(
 //                painter = painterResource(id = R.drawable.avatar_2),
-//                uiState = productUIState,
-//                navController = navController
-//            )
-//        }
+                itemSelected = itemSelected,
+                viewModel = viewModelProduct,
+            )
+        }
         composable(route = Routes.SEARCH_SCREEN) {
             SearchScreen(
                 navigateToDetail = navigateToDetail,

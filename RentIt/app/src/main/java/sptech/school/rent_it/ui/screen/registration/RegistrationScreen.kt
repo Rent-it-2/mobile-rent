@@ -1,9 +1,9 @@
-package sptech.school.rent_it.ui.screen.login
+package sptech.school.rent_it.ui.screen.registration
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -46,46 +46,84 @@ import sptech.school.rent_it.utils.Routes
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(
+fun RegistrationScreen(
     modifier: Modifier = Modifier,
     viewModel: UserViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+//    onNavigateLogin: () -> Unit
 ) {
-    val loginRequest by viewModel.userLoggin.observeAsState()
-    var email by remember { mutableStateOf(loginRequest?.email ?: "") }
-    var senha by remember { mutableStateOf(loginRequest?.password ?: "") }
+
+    val registrationRequest by viewModel.userRegistration.observeAsState()
+
+    var nomeCompleto by remember { mutableStateOf(registrationRequest?.nome ?: "") }
+    var apelido by remember { mutableStateOf(registrationRequest?.apelido ?: "") }
+    var email by remember { mutableStateOf(registrationRequest?.email ?: "") }
+    var telefone by remember { mutableStateOf(registrationRequest?.telefone ?: "") }
+//    var cpf by remember { mutableStateOf(registrationRequest?.cpf ?: "") }
+    var senha by remember { mutableStateOf(registrationRequest?.password ?: "") }
+
     var isPasswordVisible by remember { mutableStateOf(false) }
-    val (focusEmail, focusPassword) = remember { FocusRequester.createRefs() }
+    val (focusNomeCompleto, focusApelido, focusEmail, focusTelefone, focusCpf, focusPassword) = remember { FocusRequester.createRefs() }
 
     Column(
-        verticalArrangement = Arrangement.Center,
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(64.dp),
+            verticalArrangement = Arrangement.SpaceAround,
             modifier = Modifier
-                .fillMaxHeight()
                 .padding(24.dp)
         ) {
 
             Column(modifier = Modifier) {
                 Text(
-                    text = stringResource(R.string.ol_bem_vindo_de_volta),
+                    text = stringResource(R.string.crie_uma_conta),
                     style = typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = stringResource(R.string.sentimos_sua_falta),
+                    text = stringResource(R.string.encontre_o_que_precisa_hoje_mesmo),
                     style = typography.titleLarge,
                     color = MaterialTheme.colorScheme.outline
                 )
             }
 
+            Spacer(modifier = Modifier.padding(8.dp))
+
             Column(
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                Input(
+                    label = stringResource(R.string.nomecompleto),
+                    value = nomeCompleto,
+                    onValueChange = { newText ->
+                        nomeCompleto = newText
+                    },
+                    imeAction = ImeAction.Next,
+                    keyBoardType = KeyboardType.Text,
+                    focusItem = focusNomeCompleto,
+                    keyboardActions = KeyboardActions(onNext = { focusApelido.requestFocus() }),
+                    placeholder = {
+                        Text(text = stringResource(R.string.digite_seu_nome_completo))
+                    }
+                )
+
+                Input(
+                    label = stringResource(R.string.apelido),
+                    value = apelido,
+                    onValueChange = { newText ->
+                        apelido = newText
+                    },
+                    imeAction = ImeAction.Next,
+                    keyBoardType = KeyboardType.Text,
+                    focusItem = focusApelido,
+                    keyboardActions = KeyboardActions(onNext = { focusEmail.requestFocus() }),
+                    placeholder = {
+                        Text(text = stringResource(R.string.digite_seu_apelido))
+                    }
+                )
+
                 Input(
                     label = stringResource(R.string.email),
                     value = email,
@@ -95,14 +133,43 @@ fun LoginScreen(
                     imeAction = ImeAction.Next,
                     keyBoardType = KeyboardType.Email,
                     focusItem = focusEmail,
-                    keyboardActions = KeyboardActions(onNext = { focusPassword.requestFocus() }),
                     placeholder = {
                         Text(text = stringResource(R.string.digite_seu_email))
-                    },
+                    }
                 )
 
                 Input(
-                    label = stringResource(R.string.senha),
+                    label = stringResource(R.string.telefone),
+                    value = telefone,
+                    onValueChange = { newText ->
+                        telefone = newText
+                    },
+                    imeAction = ImeAction.Next,
+                    keyBoardType = KeyboardType.Phone,
+                    focusItem = focusTelefone,
+                    keyboardActions = KeyboardActions(onNext = { focusPassword.requestFocus() }),
+                    placeholder = {
+                        Text(text = stringResource(R.string.digite_seu_telefone))
+                    }
+                )
+
+//                Input(
+//                    label = stringResource(R.string.cpf),
+//                    value = cpf,
+//                    onValueChange = { newText ->
+//                        cpf = newText
+//                    },
+//                    imeAction = ImeAction.Next,
+//                    keyBoardType = KeyboardType.NumberPassword,
+//                    focusItem = focusCpf,
+//                    keyboardActions = KeyboardActions(onNext = { focusPassword.requestFocus() }),
+//                    placeholder = {
+//                        Text(text = stringResource(R.string.digite_seu_cpf))
+//                    }
+//                )
+
+                Input(
+                    label = stringResource(id = R.string.senha),
                     value = senha,
                     onValueChange = { newText ->
                         senha = newText
@@ -121,7 +188,7 @@ fun LoginScreen(
                                 contentDescription = stringResource(R.string.password_toggle)
                             )
                         }
-                    },
+                    }
                 )
 
                 Button(
@@ -130,12 +197,19 @@ fun LoginScreen(
                         containerColor = MaterialTheme.colorScheme.primary
                     ),
                     onClick = {
-                        viewModel.login(email, senha, navController)
+                        viewModel.registration(
+                            nomeCompleto = nomeCompleto,
+                            apelido = apelido,
+                            email = email,
+                            telefone = telefone,
+                            password= senha,
+                            navController
+                        )
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = stringResource(R.string.entrar),
+                        text = stringResource(id = R.string.cadastrar_se),
                         fontSize = 16.sp
                     )
                 }
@@ -148,16 +222,15 @@ fun LoginScreen(
                     .fillMaxSize()
             ) {
                 Text(
-                    text = stringResource(R.string.n_o_possui_uma_conta),
+                    text = stringResource(R.string.j_possui_uma_conta),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                TextButton(
-                    onClick = {
-                        navController.navigate(Routes.RESGISTRATION_SCREEN)
-                    }) {
+                TextButton(onClick = {
+                    navController.navigate(Routes.LOGIN_SCREEN)
+                }) {
                     Text(
-                        text = stringResource(R.string.cadastrar_se),
+                        text = stringResource(R.string.entre),
                         fontSize = 16.sp
                     )
                 }
@@ -165,12 +238,3 @@ fun LoginScreen(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-//@Composable
-//fun LoginScreenDarkPreview() {
-//    RentItTheme {
-//        LoginScreen(viewModel = viewModel(),navController = rememberNavController())
-//    }
-//}

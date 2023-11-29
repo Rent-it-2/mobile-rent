@@ -4,12 +4,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import sptech.school.rent_it.data.models.CompleteItem
 import sptech.school.rent_it.data.models.CreditCard
 import sptech.school.rent_it.data.models.Item
 import sptech.school.rent_it.data.models.LoginRequest
+import sptech.school.rent_it.data.models.RegistrationRequest
 import sptech.school.rent_it.data.models.User
 
 interface Service {
@@ -18,19 +21,30 @@ interface Service {
         @Body loginRequest: LoginRequest
     ): User
 
+    @POST("/usuarios/cadastrar")
+    suspend fun postRegistration(
+        @Body registrationRequest: RegistrationRequest
+    )
+
+    @Headers("Content-Type: application/json")
     @GET("/cartaos/usuario/{id}?id={userId}")
     suspend fun getUserCartaos(
-        @Path("userId") id: Int?
+        @Path("userId") id: Int?,
+        @Header("Authorization") authorization: String
     ): List<CreditCard>
 
+    @Headers("Content-Type: application/json")
     @GET("/cartaos/{id}?id={cartaoId}")
     suspend fun getCartaoById(
-        @Path("cartaoId") id: Int
+        @Path("cartaoId") id: Int,
+        @Header("Authorization") authorization: String
     ): List<CreditCard>
 
+    @Headers("Content-Type: application/json")
     @GET("/itens/usuario?id={userId}")
     suspend fun getUserItems(
-        @Path("userId") id: Int?
+        @Path("userId") id: Int?,
+        @Header("Authorization") authorization: String
     ): List<Item>
 
     @GET("/itens")

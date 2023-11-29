@@ -5,12 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class User(
-//    val id: String,
-//    var nomeCompleto: String,
-//    var apelido: String,
-//    var email: String,
-//    var telefone: String,
-//    var cpf: String,
     @SerializedName("id") var id: Int?,
     @SerializedName("nome") var nome: String?,
     @SerializedName("apelido") var apelido: String?,
@@ -18,6 +12,15 @@ data class User(
     @SerializedName("telefone") var telefone: String?,
     @SerializedName("token") var token: String?,
     @SerializedName("userId") var userId: Int?,
+)
+
+@Serializable
+data class RegistrationRequest(
+    @SerializedName("nome") var nome: String?,
+    @SerializedName("apelido") var apelido: String?,
+    @SerializedName("email") var email: String?,
+    @SerializedName("telefone") var telefone: String?,
+    @SerializedName("password") var password: String?
 )
 
 data class LoginRequest(
