@@ -38,12 +38,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -81,11 +79,10 @@ fun RentProductScreen(
     val context = LocalContext.current
     var dtInicioValue by rememberSaveable { mutableStateOf(LocalDate.now()) }
     var dtFimValue by rememberSaveable { mutableStateOf(LocalDate.now()) }
-    val updatedNavController = rememberUpdatedState(navController)
 //    val formattedDtInicioValue by rememberSaveable {
 //        derivedStateOf {
 //            DateTimeFormatter
-//                .ofPattern("dd/MM/yyyy")
+//                .ofPattern("dd-MM-yyyy")
 //                .format(dtInicioValue)
 //        }
 //    }
@@ -225,30 +222,39 @@ fun RentProductScreen(
                     .fillMaxWidth()
             )
 
-            Column(
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(32.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                DatePickerButton("De", Icons.Default.Today, dtInicioValue) {
-                    dtInicioValue = it
-                }
+                Column(
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    DatePickerButton("De", Icons.Default.Today, dtInicioValue) {
+                        dtInicioValue = it
+                    }
 
                     Text(
                         text = dtInicioValue.toString(),
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onBackground
                     )
-
-                DatePickerButton("Até", Icons.Default.Event, dtFimValue) {
-                    dtFimValue = it
                 }
 
+                Column(
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    DatePickerButton("Até", Icons.Default.Event, dtFimValue) {
+                        dtFimValue = it
+                    }
+
                     Text(
-                        text = dtInicioValue.toString(),
+                        text = dtFimValue.toString(),
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onBackground
                     )
+                }
             }
 
             Divider(
@@ -287,49 +293,69 @@ fun RentProductScreen(
                         Text(item.numCartao!!)
                     }
                 }
+            }
 
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.total),
+                    style = typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
                 Text(
                     text = calcularValorFinal(),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.primary
                 )
-
-                Spacer(modifier = Modifier.padding(32.dp))
-
-                Column(
-//                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Button(
-                        shape = MaterialTheme.shapes.small,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        ),
-                        onClick = {
-//                            viewModel.rentProduct(
-//                                cartaoId = selectedValue,
-//                                cpf = cpfValue,
-//                                dtFim = dtFimValue.toString(),
-//                                dtInicio = dtInicioValue.toString(),
-//                                itemId = itemSelected.id!!,
-//                                idUso = itemSelected.idUsuario!!,
-//                                valorFinal = calcularValorFinal().toInt(),
-//                                navController = navController
-//                            )
-                            openWhatsApp(itemSelected.telefone!!, context)
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = stringResource(R.string.finalizar),
-                            fontSize = 16.sp
-                        )
-                    }
-
-                }
             }
+
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Button(
+                    shape = MaterialTheme.shapes.small,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ),
+                    onClick = {
+//                        viewModel.rentProduct(
+//                            cartaoId = selectedValue,
+//                            cpf = cpfValue,
+//                            dtFim = dtFimValue.toString(),
+//                            dtInicio = dtInicioValue.toString(),
+//                            itemId = itemSelected.id!!,
+//                            idUso = itemSelected.idUsuario!!,
+//                            valorFinal = calcularValorFinal().toInt(),
+//                            navController = navController
+//                        )
+                        openWhatsApp(itemSelected.telefone!!, context)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.finalizar),
+                        fontSize = 16.sp
+                    )
+                }
+
+            }
+//            }
         }
     }
 }
@@ -366,7 +392,14 @@ fun openWhatsApp(phoneNumber: String, context: Context) {
 
     // Construa o URI com o número formatado e inclua uma mensagem inicial
     val message = "Oi, estou entrando em contato pelo aplicativo Rent-It."
-    val uri = Uri.parse("whatsapp://send?phone=$formattedPhoneNumber&text=${URLEncoder.encode(message, "UTF-8")}")
+    val uri = Uri.parse(
+        "whatsapp://send?phone=$formattedPhoneNumber&text=${
+            URLEncoder.encode(
+                message,
+                "UTF-8"
+            )
+        }"
+    )
 
     // Crie o intent e inicie a atividade
     val whatsappIntent = Intent(Intent.ACTION_VIEW, uri)
@@ -385,11 +418,12 @@ fun DatePickerButton(
     var expanded by remember { mutableStateOf(false) }
 
     Button(
+        shape = MaterialTheme.shapes.small,
         onClick = {
             expanded = true
         },
-        contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+        contentPadding = PaddingValues(8.dp),
+//        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
     ) {
         Icon(
             imageVector = icon,

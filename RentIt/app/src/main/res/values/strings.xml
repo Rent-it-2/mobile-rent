@@ -51,4 +51,5 @@
     <string name="valor_por_dia">Valor por dia:</string>
     <string name="finalizar">Finalizar</string>
     <string name="item">Item</string>
+    <string name="total">Total</string>
 </resources>

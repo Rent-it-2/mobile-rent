@@ -107,24 +107,28 @@ class UserViewModel(
     ) {
         viewModelScope.launch {
             try {
-                val transactionRequest = Transaction(
-                    cartaoId = cartaoId,
-                    cpf = cpf,
-                    dtFim = dtFim,
-                    dtInicio = dtInicio,
-                    itemId = itemId,
-                    idUso = idUso,
-                    valorFinal = valorFinal
-                )
+//                val transactionRequest = Transaction(
+//                    cartaoId = cartaoId,
+//                    cpf = cpf,
+//                    dtFim = dtFim,
+//                    dtInicio = dtInicio,
+//                    itemId = itemId,
+//                    idUso = idUso,
+//                    valorFinal = valorFinal
+//                )
 
-                val response = service.postAlugarItem(transactionRequest)
-                Log.d("Service error:", "Response Transaction: $response")
-                navController.navigate(Routes.PRODUCT_SCREEN)
+                Log.d("Service logs:", "cartaoId: $cartaoId, cpf: $cpf, dtFim: $dtFim, dtInicio: $dtInicio, itemId: $itemId, idUso: $idUso, valorFinal: $valorFinal")
+
+//                val response = service.postAlugarItem(transactionRequest)
+
+//                Log.d("Service logs:", "Response Transaction: $response")
+//                navController.navigate(Routes.PRODUCT_SCREEN)
             } catch (e: Exception) {
                 Log.d("Service error:", e.toString())
             }
         }
     }
+
 
     fun getUserCards() {
         viewModelScope.launch {

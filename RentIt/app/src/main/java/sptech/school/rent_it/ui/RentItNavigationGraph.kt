@@ -47,6 +47,7 @@ fun RentItNavigationGraph(
             )
         }
         composable(route = Routes.PRODUCT_SCREEN) {
+            viewModelProduct.getItems()
             ProductScreen(
                 navigateToDetail = navigateToDetail,
                 products = allProducts,
