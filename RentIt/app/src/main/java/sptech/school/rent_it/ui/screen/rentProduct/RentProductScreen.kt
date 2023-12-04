@@ -79,6 +79,17 @@ fun RentProductScreen(
     val context = LocalContext.current
     var dtInicioValue by rememberSaveable { mutableStateOf(LocalDate.now()) }
     var dtFimValue by rememberSaveable { mutableStateOf(LocalDate.now()) }
+
+
+    // Assign sample values to the state variables
+    var cartaoId by remember { mutableStateOf(123) }
+    var cpf by remember { mutableStateOf("12345678901") }
+    var dtFim by remember { mutableStateOf("2023-12-31") }
+    var dtInicio by remember { mutableStateOf("2023-12-01") }
+    var itemId by remember { mutableStateOf(456) }
+    var idUso by remember { mutableStateOf(789) }
+    var valFinal by remember { mutableStateOf(1000) }
+
 //    val formattedDtInicioValue by rememberSaveable {
 //        derivedStateOf {
 //            DateTimeFormatter
@@ -96,7 +107,8 @@ fun RentProductScreen(
 
     fun calcularValorFinal(): String {
         val quantidadeDias = calcularDiasEntreDatas(dtInicioValue, dtFimValue)
-        val valorFinal = quantidadeDias * itemSelected!!.valorDia!!
+        var valorFinal = quantidadeDias * itemSelected!!.valorDia!!
+        valFinal = valorFinal.toInt()
         return NumberFormat.getCurrencyInstance().format(valorFinal)
     }
 
@@ -344,6 +356,18 @@ fun RentProductScreen(
 //                            valorFinal = calcularValorFinal().toInt(),
 //                            navController = navController
 //                        )
+
+                        viewModel.rentProduct(
+                            cartaoId = selectedValue,
+                            cpf = cpfValue,
+                            dtFim = dtFimValue.toString(),
+                            dtInicio = dtInicioValue.toString(),
+                            itemId = itemSelected.id!!,
+                            idUso = itemSelected.idUsuario!!,
+                            valorFinal = valFinal,
+                            navController = navController
+                        )
+
                         openWhatsApp(itemSelected.telefone!!, context)
                     },
                     modifier = Modifier.fillMaxWidth()

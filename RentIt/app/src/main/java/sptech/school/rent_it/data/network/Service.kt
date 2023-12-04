@@ -35,20 +35,13 @@ interface Service {
     )
 
     @POST("/transacoes/alugar-item")
-    fun postAlugarItem(@Body body: Transaction)
+    suspend fun postAlugarItem(@Body body: Transaction)
 
-//    @Headers("Content-Type: application/json")
-//    @GET("/cartaos/usuario/{path}")
-//    suspend fun getUserCartaos(
-//        @Query("path") path: String?,
-////        @Query("userId") userId: Int?,
-////        @Header("Authorization") authorization: String
-//    ): List<CreditCard>
-@GET("/cartaos/usuario/{id}")
-suspend fun getUserCartaos(
-    @Path("id") id: String?,  // Ou o tipo correto, se for diferente de String
-    @Query("id") queryId: Int?
-): List<CreditCard>
+    @GET("/cartaos/usuario/{id}")
+    suspend fun getUserCartaos(
+        @Path("id") id: String?,
+        @Query("id") queryId: Int?
+    ): List<CreditCard>
 
     @Headers("Content-Type: application/json")
     @GET("/cartaos/{id}?id={cartaoId}")
@@ -61,7 +54,6 @@ suspend fun getUserCartaos(
     suspend fun getUserItems(
         @Query("id") userId: Int?
     ): List<Item>
-
 
     @GET("/itens")
     suspend fun getItems(): List<Item>
