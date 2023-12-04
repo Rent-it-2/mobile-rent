@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
+import okhttp3.HttpUrl
 import sptech.school.rent_it.data.models.CreditCard
 import sptech.school.rent_it.data.models.Item
 import sptech.school.rent_it.data.models.LoginRequest
 import sptech.school.rent_it.data.models.RegistrationRequest
+import sptech.school.rent_it.data.models.Transaction
 import sptech.school.rent_it.data.models.User
 import sptech.school.rent_it.data.network.Service
 import sptech.school.rent_it.utils.Routes
@@ -85,8 +87,7 @@ class UserViewModel(
                     password = password
                 )
                 val userRegistration = service.postRegistration(request)
-//                _userData.value = userRegistration
-                Log.d("Service success:", "Response: $userRegistration")
+                Log.d("Service success:", "Response Registration: $userRegistration")
                 navController.navigate(Routes.LOGIN_SCREEN)
             } catch (e: Exception) {
                 Log.d("Service error:", e.toString())
@@ -94,12 +95,42 @@ class UserViewModel(
         }
     }
 
+    fun rentProduct(
+        cartaoId: Int,
+        cpf: String,
+        dtFim: String,
+        dtInicio: String,
+        itemId: Int,
+        idUso: Int,
+        valorFinal: Int,
+        navController: NavHostController
+    ) {
+        viewModelScope.launch {
+            try {
+                val transactionRequest = Transaction(
+                    cartaoId = cartaoId,
+                    cpf = cpf,
+                    dtFim = dtFim,
+                    dtInicio = dtInicio,
+                    itemId = itemId,
+                    idUso = idUso,
+                    valorFinal = valorFinal
+                )
+
+                val response = service.postAlugarItem(transactionRequest)
+                Log.d("Service error:", "Response Transaction: $response")
+                navController.navigate(Routes.PRODUCT_SCREEN)
+            } catch (e: Exception) {
+                Log.d("Service error:", e.toString())
+            }
+        }
+    }
 
     fun getUserCards() {
         viewModelScope.launch {
             try {
                 val userCards =
-                    service.getUserCartaos(userData.value?.id, "Bearer${userData.value?.token}")
+                service.getUserCartaos("{id}", userData.value?.id)
                 _userCartoes.value = userCards
                 Log.d("Service error:", "Response: cartões: ${_userCartoes.value}")
             } catch (e: Exception) {
@@ -112,7 +143,7 @@ class UserViewModel(
         viewModelScope.launch {
             try {
                 val userItems =
-                    service.getUserItems(userData.value?.id, "Bearer${userData.value?.token}")
+                    service.getUserItems(userData.value?.id)
                 _userItems.value = userItems
                 Log.d("Service error:", "Response: itens do usuário: ${_userItems.value}")
             } catch (e: Exception) {

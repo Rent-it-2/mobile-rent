@@ -35,7 +35,6 @@ fun ProductDetailScreen(
 //    painter: Painter,
     itemSelected: CompleteItem?,
     viewModelProduct: ProductViewModel,
-//    navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
 
@@ -113,7 +112,7 @@ fun ProductDetailScreen(
                     verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxHeight()
                 ) {
-//                    if (itemSelected != null) {
+
                     itemSelected!!.nomeUsuario?.let {
                         Text(
                             text = it,
@@ -121,14 +120,12 @@ fun ProductDetailScreen(
                             color = MaterialTheme.colorScheme.onBackground
                         )
                     }
-//                    }
-//                    if (itemSelected != null) {
+
                     Text(
                         text = itemSelected!!.telefone.toString(),
                         style = typography.titleSmall,
                         color = MaterialTheme.colorScheme.outline
                     )
-//                    }
                 }
                 IconButton(onClick = { "Tdod" }) {
                     Icon(
@@ -155,13 +152,11 @@ fun ProductDetailScreen(
                     color = MaterialTheme.colorScheme.onBackground,
                 )
 
-//                if (itemSelected != null) {
                 Text(
                     text = itemSelected!!.descricao.toString(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-//                }
 
                 Spacer(modifier = Modifier.padding(32.dp))
 
@@ -170,24 +165,3 @@ fun ProductDetailScreen(
 
     }
 }
-
-//@Preview(showBackground = true)
-//@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-//@Composable
-//fun ProductDetailScreenDarkPreview() {
-//    RentItTheme {
-//        ProductDetailScreen(
-//            painterResource(id = R.drawable.avatar_2),
-//            itemSelected =
-//            Item(
-//                id = "1",
-//                nome = "Furadeira de Luxo",
-//                categoria = 1,
-//                descricao = "Thought we might be able to go over some details about our upcoming vacation. I've been doing a bit of research and have come across a few paces in Northern Brazil that I think we should check out. One, the north has some of the most predictable wind on the planet. I'd love to get out on the ocean and kitesurf for a couple of days if we're going to be anywhere near or around Taiba. I hear it's beautiful there and if you're up for it, I'd love to go. Other than that, I haven't spent too much time looking into places along our road trip route. I'm assuming we can find places to stay and things to do as we drive and find places we think look interesting. But... I know you're more of a planner, so if you have ideas or places in mind, lets jot some ideas down! Maybe we can jump on the phone later today if you have a second.,\n",
-//                valDia = 34.0,
-//                usuario = users.get(1)
-//            ),
-//            navController = rememberNavController()
-//        )
-//    }
-//}

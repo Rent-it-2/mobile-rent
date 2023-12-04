@@ -44,7 +44,7 @@ fun CardCreditCard(
             },
             supportingContent = {
                 Text(
-                    text = creditCard.cpfTitular,
+                    text = creditCard.cpf!!,
                     style = typography.titleSmall,
                     color = MaterialTheme.colorScheme.outline
                 )
@@ -74,22 +74,22 @@ fun CardCreditCard(
 
                 SheetInfos(
                     title = "Nome Impresso:",
-                    text = creditCard.nomeImpresso
+                    text = creditCard.nomeUsuario!!
                 )
 
                 SheetInfos(
                     title = "Número do Cartão:",
-                    text = creditCard.numCartao
+                    text = creditCard.numCartao!!
                 )
 
                 SheetInfos(
                     title = "CPF do Titular:",
-                    text = creditCard.cpfTitular
+                    text = creditCard.cpf!!
                 )
 
                 SheetInfos(
                     title = "Validde do Cartão:",
-                    text = creditCard.validade
+                    text = creditCard.validade!!
                 )
                 
                 Spacer(modifier = Modifier.padding(32.dp))

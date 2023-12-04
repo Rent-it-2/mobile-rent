@@ -22,12 +22,12 @@ fun CreditCardList(
     Spacer(modifier = Modifier.padding(8.dp))
 
     LazyColumn(modifier = modifier) {
-        items(userCards) { cards ->
+        items(userCards) { card ->
             Spacer(modifier = Modifier.padding(8.dp))
             CardCreditCard(
-                title = cards.nomeImpresso,
+                title = card.nomeUsuario!!,
                 icon = Icons.Filled.CreditCard,
-                creditCard= cards
+                creditCard= card
             )
         }
     }

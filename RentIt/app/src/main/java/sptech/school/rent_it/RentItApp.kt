@@ -1,5 +1,7 @@
 package sptech.school.rent_it
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +31,7 @@ import sptech.school.rent_it.ui.theme.shapes
 import sptech.school.rent_it.ui.theme.typography
 import sptech.school.rent_it.utils.Routes
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentItApp(
     modifier: Modifier = Modifier,
@@ -92,12 +95,12 @@ fun RentItApp(
                     icon = {
                         Icon(
                             imageVector = Icons.Filled.CurrencyExchange,
-                            contentDescription = "Alugar"
+                            contentDescription = stringResource(R.string.alugar)
                         )
                     },
                     shape = shapes.extraLarge,
                     containerColor = MaterialTheme.colorScheme.primary,
-                    onClick = { viewModelProduct.rentProduct(navController) },
+                    onClick = { navController.navigate(Routes.RENT_PRODUCT_SCREEN) },
                     modifier = Modifier.fillMaxWidth(fraction = 0.92F)
                 )
             }

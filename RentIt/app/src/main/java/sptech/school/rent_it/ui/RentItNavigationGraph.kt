@@ -1,5 +1,7 @@
 package sptech.school.rent_it.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,9 +16,10 @@ import sptech.school.rent_it.ui.screen.registration.RegistrationScreen
 import sptech.school.rent_it.ui.screen.search.SearchScreen
 import sptech.school.rent_it.ui.screens.productDetail.ProductDetailScreen
 import sptech.school.rent_it.ui.screens.profile.ProfileScreen
-import sptech.school.rent_it.ui.screens.rentProductScreen.RentProductScreen
+import sptech.school.rent_it.ui.screen.rentProduct.RentProductScreen
 import sptech.school.rent_it.utils.Routes
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentItNavigationGraph(
     allProducts: List<Item>,
@@ -58,10 +61,12 @@ fun RentItNavigationGraph(
             )
         }
         composable(route = Routes.RENT_PRODUCT_SCREEN) {
+            viewModelUser.getUserCards()
             RentProductScreen(
 //                painter = painterResource(id = R.drawable.avatar_2),
                 itemSelected = itemSelected,
-                viewModel = viewModelProduct,
+                viewModel = viewModelUser,
+                navController = navController
             )
         }
         composable(route = Routes.SEARCH_SCREEN) {

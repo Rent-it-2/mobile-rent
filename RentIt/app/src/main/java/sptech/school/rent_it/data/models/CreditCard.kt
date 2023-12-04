@@ -1,12 +1,13 @@
 package sptech.school.rent_it.data.models
 
+import com.google.gson.annotations.SerializedName
+
 data class CreditCard(
-    val id: Int,
-    var numCartao: String,
-    var validade: String,
-    var cpfTitular: String,
-    var usuario: User,
-    var nomeImpresso: String
+    @SerializedName("id") var id: Int? = null,
+    @SerializedName("cpf") var cpf: String? = null,
+    @SerializedName("numCartao") var numCartao: String? = null,
+    @SerializedName("validade") var validade: String? = null,
+    @SerializedName("nomeUsuario") var nomeUsuario: String? = null
 )
 
 //var cards: MutableList<CreditCard> = mutableListOf(
