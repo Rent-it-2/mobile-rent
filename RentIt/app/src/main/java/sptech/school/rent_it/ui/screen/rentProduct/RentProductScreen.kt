@@ -1,6 +1,5 @@
 package sptech.school.rent_it.ui.screen.rentProduct
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -73,6 +72,7 @@ fun RentProductScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
+    val userInfos by viewModel.userData.observeAsState()
     val userCards by viewModel.userCartoes.observeAsState(emptyList())
     var selectedValue by rememberSaveable { mutableStateOf(0) }
     var cpfValue by rememberSaveable { mutableStateOf("") }
@@ -82,12 +82,12 @@ fun RentProductScreen(
 
 
     // Assign sample values to the state variables
-    var cartaoId by remember { mutableStateOf(123) }
-    var cpf by remember { mutableStateOf("12345678901") }
-    var dtFim by remember { mutableStateOf("2023-12-31") }
-    var dtInicio by remember { mutableStateOf("2023-12-01") }
-    var itemId by remember { mutableStateOf(456) }
-    var idUso by remember { mutableStateOf(789) }
+//    var cartaoId by remember { mutableStateOf(123) }
+//    var cpf by remember { mutableStateOf("12345678901") }
+//    var dtFim by remember { mutableStateOf("2023-12-31") }
+//    var dtInicio by remember { mutableStateOf("2023-12-01") }
+//    var itemId by remember { mutableStateOf(456) }
+//    var idUso by remember { mutableStateOf(789) }
     var valFinal by remember { mutableStateOf(1000) }
 
 //    val formattedDtInicioValue by rememberSaveable {
@@ -368,7 +368,14 @@ fun RentProductScreen(
                             navController = navController
                         )
 
-                        openWhatsApp(itemSelected.telefone!!, context)
+                        val mensagem = """
+    Olá, venho da RENT-IT!
+
+    Meu nome é ${userInfos!!.nome!!}. Estou entrando em contato para expressar meu interesse em alugar o item ${itemSelected.nomeItem!!} por um período de ${calcularDiasEntreDatas(dtInicioValue, dtFimValue)} dias, resultando em um total de ${valFinal}.
+
+    Agradeço desde já pela atenção e aguardo informações adicionais sobre o processo de locação.
+""".trimIndent()
+                        openWhatsApp(itemSelected.telefone!!, mensagem, context)
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -389,33 +396,24 @@ fun calcularDiasEntreDatas(dataInicio: LocalDate, dataFim: LocalDate): Long {
     return dataFim.toEpochDay() - dataInicio.toEpochDay()
 }
 
-//@SuppressLint("SuspiciousIndentation")
 //fun openWhatsApp(phoneNumber: String, context: Context) {
+//    val sanitizedPhoneNumber = phoneNumber.replace("[^0-9]".toRegex(), "")
+//    val formattedPhoneNumber = "+55$sanitizedPhoneNumber"
+//
 //    val whatsappIntent = Intent(Intent.ACTION_VIEW)
-//    val formattedPhoneNumber = phoneNumber.replace("+", "").replace(" ", "")
-//    Log.d("Service error:", "WhatsApp $formattedPhoneNumber")
 //    val uri = Uri.parse("whatsapp://send?phone=$formattedPhoneNumber")
 //    whatsappIntent.data = uri
-//        ContextCompat.startActivity(context, whatsappIntent, null)
+//
+//    Log.d("Service error:", "WhatsApp $formattedPhoneNumber")
+//
+//    ContextCompat.startActivity(context, whatsappIntent, null)
 //}
 
+fun openWhatsApp(phoneNumber: String, message: String, context: Context) {
+    val sanitizedPhoneNumber = phoneNumber.replace("[^0-9]".toRegex(), "")
+    val formattedPhoneNumber = "+55$sanitizedPhoneNumber"
 
-@SuppressLint("SuspiciousIndentation")
-fun openWhatsApp(phoneNumber: String, context: Context) {
-    // Remova espaços em branco do número
-    val trimmedPhoneNumber = phoneNumber.replace(" ", "")
-
-    // Adicione o prefixo "+1" se não estiver presente
-    val formattedPhoneNumber = if (!trimmedPhoneNumber.startsWith("+1")) {
-        "+1$trimmedPhoneNumber"
-    } else {
-        trimmedPhoneNumber
-    }
-
-    Log.d("Service error:", "WhatsApp $formattedPhoneNumber")
-
-    // Construa o URI com o número formatado e inclua uma mensagem inicial
-    val message = "Oi, estou entrando em contato pelo aplicativo Rent-It."
+    val whatsappIntent = Intent(Intent.ACTION_VIEW)
     val uri = Uri.parse(
         "whatsapp://send?phone=$formattedPhoneNumber&text=${
             URLEncoder.encode(
@@ -424,9 +422,10 @@ fun openWhatsApp(phoneNumber: String, context: Context) {
             )
         }"
     )
+    whatsappIntent.data = uri
 
-    // Crie o intent e inicie a atividade
-    val whatsappIntent = Intent(Intent.ACTION_VIEW, uri)
+    Log.d("Service error:", "WhatsApp $formattedPhoneNumber")
+
     ContextCompat.startActivity(context, whatsappIntent, null)
 }
 
@@ -446,8 +445,7 @@ fun DatePickerButton(
         onClick = {
             expanded = true
         },
-        contentPadding = PaddingValues(8.dp),
-//        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+        contentPadding = PaddingValues(8.dp)
     ) {
         Icon(
             imageVector = icon,
